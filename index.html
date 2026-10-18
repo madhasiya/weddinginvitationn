@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation</title>
+    <!-- Playfair Display Font Import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #050505;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; font-family: 'Georgia', serif; overflow: hidden;
+        }
+
+        /* Floating Gold Particles Background */
+        .particles {
+            position: absolute; width: 100%; height: 100%; z-index: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #d4af37, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 160px 120px, #d4af37, rgba(0,0,0,0));
+            background-repeat: repeat; background-size: 200px 200px;
+            animation: particleAnimation 30s linear infinite; opacity: 0.6;
+        }
+        @keyframes particleAnimation {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-200px); }
+        }
+
+        /* Fixed Aspect-Ratio Wrapper */
+        .card-container {
+            width: 100%;
+            max-width: 420px;
+            height: 92vh;
+            max-height: 850px;
+            position: relative;
+            z-index: 10;
+            animation: floatCard 6s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .wedding-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            cursor: pointer;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.9);
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Inside Page relative wrapper */
+        .card-inside {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; opacity: 0; transform: scale(0.92);
+            transition: opacity 1.2s ease 0.2s, transform 1.2s ease 0.2s;
+        }
+        .wedding-card.is-open .card-inside {
+            opacity: 1; transform: scale(1);
+        }
+
+        /* Background Image element */
+        .card-img-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 1;
+        }
+
+        /* Hearts Container */
+        .hearts-container {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; overflow: hidden; z-index: 5;
+        }
+        .falling-heart {
+            position: absolute; top: -20px; 
+            color: #d4af37 !important;
+            text-shadow: 0 0 6px rgba(212, 175, 55, 0.8), 0 0 10px rgba(255, 215, 0, 0.5);
+            animation: fall linear forwards; 
+            pointer-events: none;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(870px) rotate(360deg); opacity: 0; }
+        }
+
+        /* Fixed Dynamic Title & Name Overlay */
+        .inside-guest-overlay {
+            position: absolute;
+            top: 18%;
+            left: 52.5%;
+            transform: translateX(-50%);
+            width: 80%;
+            text-align: center;
+            z-index: 6;
+            color: #2b2b2b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.2;
+        }
+
+        .titles-container {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+            color: #333333;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .title-option { display: inline-block; transition: all 0.3s ease; }
+        .title-option.strikethrough { text-decoration: line-through; opacity: 0.5; }
+
+        .guest-full-name {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 14px;
+            font-weight: 600;
+            color: #111111;
+            letter-spacing: 1px;
+            margin-top: 2px;
+            border-top: 1.5px solid #2b2b2b;
+            padding-top: 4px;
+            display: inline-block;
+            width: 180px;
+            text-align: center;
+            box-sizing: border-box;
+            line-height: 1.2;
+        }
+
+        /* Transparent Glass Countdown Box */
+        .countdown-container {
+            position: absolute;
+            top: 3px;
+            left: 52.3%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 6px 12px;
+            text-align: center;
+            color: #fff;
+            width: max-content;
+            min-width: 170px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            z-index: 6;
+        }
+
+        .countdown-title {
+            font-family: 'Georgia', serif;
+            font-size: 6px; color: #d4af37;
+            text-transform: uppercase; letter-spacing: 2px;
+            margin-bottom: 4px; font-weight: 500;
+        }
+
+        .countdown-timer { display: flex; justify-content: center; align-items: center; gap: 10px; }
+        .time-box { text-align: center; position: relative; }
+        .time-box:not(:last-child)::after {
+            content: ":"; position: absolute; right: -6px; top: 0px;
+            color: rgba(212, 175, 55, 0.8); font-size: 10px; font-weight: bold;
+        }
+        .time-box span { font-size: 12px; font-weight: normal; color: #ffffff; display: block; line-height: 1; }
+        .time-box p { font-size: 5px; color: #d4af37; text-transform: uppercase; margin-top: 3px; letter-spacing: 0.5px; }
+
+        /* Absolute Location Pin Positioning */
+        .location-link {
+            position: absolute;
+            top: 79%; 
+            left: 28.8%; 
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            z-index: 7;
+            text-decoration: none;
+            pointer-events: none;
+        }
+
+        .wedding-card.is-open .location-link {
+            animation: fadeInLink 0.5s ease forwards;
+            animation-delay: 0.8s;
+            pointer-events: auto;
+        }
+
+        @keyframes fadeInLink {
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .location-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 31px; height: 33px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1.5px solid #d4af37; border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+            animation: continuousPop 4s infinite ease-in-out;
+        }
+
+        @keyframes continuousPop {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
+            15% { transform: scale(1.35); box-shadow: 0 0 25px rgba(212, 175, 55, 1); }
+            30% { transform: scale(0.95); }
+            45% { transform: scale(1.2); box-shadow: 0 0 20px rgba(212, 175, 55, 0.8); }
+            60% { transform: scale(1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
+        }
+
+        .location-icon { width: 22px; height: 22px; fill: #d4af37; }
+
+        /* Front Cover Slide-Up Animation */
+        .card-cover {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; display: flex; flex-direction: column;
+            justify-content: flex-end; align-items: center; padding-bottom: 70px;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .card-cover.open { transform: translateY(-100%); }
+
+        .guest-name-box { display: none; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" src="music.mp3" preload="auto"></audio>
+    <div class="particles"></div>
+
+    <div class="card-container">
+        <div class="wedding-card" id="inviteCard" onclick="openInvitation()">
+            
+            <!-- Inside Invitation -->
+            <div class="card-inside" id="innerImg">
+                <img src="inside.jpg" alt="Wedding Invitation" class="card-img-bg">
+
+                <div class="hearts-container" id="heartsContainer"></div>
+
+                <div class="inside-guest-overlay">
+                    <div class="titles-container">
+                        <span id="t-mr" class="title-option">Mr.</span> / 
+                        <span id="t-mrs" class="title-option">Mrs.</span> / 
+                        <span id="t-miss" class="title-option">Miss</span> / 
+                        <span id="t-mrmrs" class="title-option">Mr. & Mrs.</span>
+                    </div>
+                    <div id="innerGuestName" class="guest-full-name">Guest Name</div>
+                </div>
+
+                <div class="countdown-container">
+                    <div class="countdown-title">Forever Begins In</div>
+                    <div class="countdown-timer">
+                        <div class="time-box"><span id="days">00</span><p>Days</p></div>
+                        <div class="time-box"><span id="hours">00</span><p>Hours</p></div>
+                        <div class="time-box"><span id="mins">00</span><p>Mins</p></div>
+                        <div class="time-box"><span id="secs">00</span><p>Secs</p></div>
+                    </div>
+                </div>
+
+                <a href="https://maps.app.goo.gl/nhUzBx7LYy71X4X38?g_st=ic" target="_blank" class="location-link" onclick="event.stopPropagation();">
+                    <div class="location-btn" title="Open Location on Google Maps">
+                        <svg class="location-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5-2.5z"/>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Slide-Up Cover Page -->
+            <div class="card-cover" id="coverImg">
+                <img src="cover.jpg" alt="Cover" class="card-img-bg">
+                <div class="guest-name-box" id="guestNameBox"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const weddingDate = new Date("2026-12-16T09:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const difference = weddingDate - now;
+
+            if (difference > 0) {
+                const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                document.getElementById('days').innerText = days < 10 ? '0' + days : days;
+                document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
+                document.getElementById('mins').innerText = minutes < 10 ? '0' + minutes : minutes;
+                document.getElementById('secs').innerText = seconds < 10 ? '0' + seconds : seconds;
+            } else {
+                document.querySelector('.countdown-container').innerHTML = "<div class='countdown-title'>Today is the Big Day!</div>";
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        let name = urlParams.get('name');
+        let title = urlParams.get('title');
+
+        const nameBox = document.getElementById('guestNameBox');
+        if (name && name.trim() !== "") {
+            nameBox.innerText = name;
+            document.getElementById('innerGuestName').innerText = name;
+        }
+
+        const titleElements = {
+            'mr': document.getElementById('t-mr'),
+            'mrs': document.getElementById('t-mrs'),
+            'miss': document.getElementById('t-miss'),
+            'mrmrs': document.getElementById('t-mrmrs')
+        };
+
+        if (title) {
+            const selectedTitle = title.toLowerCase().trim();
+            if (titleElements[selectedTitle]) {
+                Object.keys(titleElements).forEach(key => {
+                    if (key !== selectedTitle) {
+                        titleElements[key].classList.add('strikethrough');
+                    }
+                });
+            }
+        }
+
+        function createGoldenHeart() {
+            const container = document.getElementById('heartsContainer');
+            if (!container) return;
+
+            const heart = document.createElement('div');
+            heart.classList.add('falling-heart');
+            heart.innerHTML = '&#x2665;&#xFE0E;';
+            
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 3.5) + 's';
+            heart.style.fontSize = (Math.random() * 6 + 8) + 'px';
+            heart.style.opacity = Math.random() * 0.7 + 0.3;
+
+            container.appendChild(heart);
+
+            setTimeout(() => { heart.remove(); }, 6500);
+        }
+
+        function openInvitation() {
+            const card = document.getElementById('inviteCard');
+            const cover = document.getElementById('coverImg');
+            
+            if (!cover.classList.contains('open')) {
+                card.classList.add('is-open');
+                cover.classList.add('open');
+
+                setInterval(createGoldenHeart, 280);
+
+                let music = document.getElementById('bgMusic');
+                if (music && music.paused) {
+                    music.play().catch(e => console.log("Audio play allowed after click"));
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>
